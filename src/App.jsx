@@ -19,6 +19,9 @@ useEffect(()=>{
   .then(response => response.json())
   .then (post =>{setTitle(post.title)
    setLoading(false)
+
+   setToast({type:'info', message:`post with id ${postId} loaded`})
+
 })
 }, [postId])
 
