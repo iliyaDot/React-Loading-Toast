@@ -8,16 +8,24 @@ import Toast from './Components/Toast/Toast';
 
 export default function App() {
 
-const [toast ,  setToast]=useState({type: 'info', message:'heloo'}) // for me : bara inke information dar yekjaie zakhire konim az usestate estefade kardim va ghesmat pain
+const [toast ,  setToast]=useState({type: 'info', message:''}) // for me : bara inke information dar yekjaie zakhire konim az usestate estefade kardim va ghesmat pain
 const [title ,setTitle]= useState('')
 const [postId ,setPostId]= useState(1)
+const [loading ,setLoading]= useState(true) // baraye inke namayesh dade shavad loading ya nashavad
 
 
 useEffect(()=>{
   fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)
   .then(response => response.json())
-  .then (post =>setTitle(post.title))
+  .then (post =>{setTitle(post.title)
+   setLoading(false)
+})
 }, [postId])
+
+function handleLoading(e){
+  setPostId(e.target.value)
+  setLoading(true)
+} // zamani ke request dade shod loading namayesh dade she va vaghti response shod dge javab dade nashe 
 
   return (
 //     //to in version dare bug mikhure age laoding hamntori bashe matn json neshon nmide pas bayad barash shart bashe //
@@ -26,11 +34,12 @@ useEffect(()=>{
 
   <div>
     <label>Post Id :</label>
-    <input value={postId} onChange={(e)=>setPostId(e.target.value)} type='number' /> 
+    <input value={postId} onChange={ handleLoading} type='number' /> 
   
   </div>
 <div>
-<h1>{title}</h1>
+{loading ?<Loading /> : <h1>{title}</h1>}
+
 
 </div>
 
