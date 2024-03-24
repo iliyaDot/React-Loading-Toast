@@ -14,21 +14,44 @@ const [postId ,setPostId]= useState(1)
 const [loading ,setLoading]= useState(true) // baraye inke namayesh dade shavad loading ya nashavad
 
 
+function userAction(type, payload){ // *baraye har kodom baayd payload motakheses khudesh dashte bashim
+switch (type) {
+  case'get-post-success': // *in baraye useeffect code haye ke neveshtime hamon kar daram mikonam
+
+  setTitle(payload.title) // *inja mostaghiman nmitavan paylaod pass dad chon payintar meghdari ke pass dade shode ye obj hast.
+  setLoading(false)
+
+  setToast({type:'info', message:payload.message}) 
+    break;
+case 'get-post-request':
+
+setPostId(payload)
+setLoading(true)
+
+
+  default:
+    break;
+}
+}
 useEffect(()=>{
   fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)
   .then(response => response.json())
-  .then (post =>{setTitle(post.title)
-   setLoading(false)
-
-   setToast({type:'info', message:`post with id ${postId} loaded`})
+  .then (post =>{
+    
+    userAction('get-post-success',
+    {
+      title:post.title,
+      message: `post with id ${postId} loaded`
+    }
+    ) // *ma darinja ye title va ye id niaz darim nmitonim mostaghiman vared konim pas be ye obj niaz darim
 
 })
 }, [postId])
 
+
 function handleLoading(e){
-  setPostId(e.target.value)
-  setLoading(true)
-} // zamani ke request dade shod loading namayesh dade she va vaghti response shod dge javab dade nashe 
+ userAction('get-post-request',e.target.value) //*payload inja ye value , ye id hsatesh.
+} 
 
   return (
 //     //to in version dare bug mikhure age laoding hamntori bashe matn json neshon nmide pas bayad barash shart bashe //
@@ -50,6 +73,3 @@ function handleLoading(e){
     </div>
   )
 }
-
-// baraye <input value={postId} onChange={(e)=>setPostId(e.target.value)} type='number' /> 
-// state tarif kardim ke $ optimize she ke hardafe avaz she matni ke az json migirim ro
