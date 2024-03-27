@@ -16,18 +16,29 @@ loading: true
 function userAction(state,action){ // state mitone harchi bashe ye adad ya obj
   switch (action.type) { // action ham structure va nahve vorodi bastegi be ma dare ke bhtre ghardad dashte bashim.
     case'get-post-success': 
+
+
+return (
+  {
+    ...state, // harchi hast avalesh gharar bede baghi mavared overwrite kon
+    toast: {type: 'info', message:action.message},
+    title: action.title, // ghardad inke age dakhel ation ya payload ya x gharar dadin dar dakhel hamon gharar bedin bara tamizi kar .
+    // postId: 1, chon taghiresh nadadim nabayad inja bashe mitonim ba spirit kardan maghadri ghabli bedast biarim.
+    loading: false
+  }
+)
+
+case 'get-post-request':
+  return {
+    ...state,
+    postId: action.postId,
+    loading: true
+  };
+
+
+
   
-    setTitle(payload.title) 
-    setLoading(false)
-  
-    setToast({type:'info', message:payload.message}) 
-      break;
-  case 'get-post-request':
-  
-  setPostId(payload)
-  setLoading(true)
-  
-  break;
+    
     default:
       break;
   }
@@ -39,7 +50,7 @@ function userAction(state,action){ // state mitone harchi bashe ye adad ya obj
 
 export default function App() {
  
-useReducer()
+const[state, dispatch]=useReducer( userAction,initialState)
 
 
 useEffect(()=>{
