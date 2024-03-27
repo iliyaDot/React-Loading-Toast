@@ -1,38 +1,47 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useReducer } from 'react'
 import Loading from './Components/Loading';
 import Toast from './Components/Toast/Toast';
+
+
+
+const initialState = {
+toast: {type: 'info', message:''},
+title: '',
+postId: 1,
+loading: true
+
+}
+
+
+function userAction(state,action){ // state mitone harchi bashe ye adad ya obj
+  switch (action.type) { // action ham structure va nahve vorodi bastegi be ma dare ke bhtre ghardad dashte bashim.
+    case'get-post-success': 
+  
+    setTitle(payload.title) 
+    setLoading(false)
+  
+    setToast({type:'info', message:payload.message}) 
+      break;
+  case 'get-post-request':
+  
+  setPostId(payload)
+  setLoading(true)
+  
+  break;
+    default:
+      break;
+  }
+  }
 
 
 
 
 
 export default function App() {
-
-const [toast ,  setToast]=useState({type: 'info', message:''}) // for me : bara inke information dar yekjaie zakhire konim az usestate estefade kardim va ghesmat pain
-const [title ,setTitle]= useState('')
-const [postId ,setPostId]= useState(1)
-const [loading ,setLoading]= useState(true) // baraye inke namayesh dade shavad loading ya nashavad
+ 
+useReducer()
 
 
-function userAction(type, payload){ // *baraye har kodom baayd payload motakheses khudesh dashte bashim
-switch (type) {
-  case'get-post-success': // *in baraye useeffect code haye ke neveshtime hamon kar daram mikonam
-
-  setTitle(payload.title) // *inja mostaghiman nmitavan paylaod pass dad chon payintar meghdari ke pass dade shode ye obj hast.
-  setLoading(false)
-
-  setToast({type:'info', message:payload.message}) 
-    break;
-case 'get-post-request':
-
-setPostId(payload)
-setLoading(true)
-
-
-  default:
-    break;
-}
-}
 useEffect(()=>{
   fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)
   .then(response => response.json())
@@ -43,8 +52,7 @@ useEffect(()=>{
       title:post.title,
       message: `post with id ${postId} loaded`
     }
-    ) // *ma darinja ye title va ye id niaz darim nmitonim mostaghiman vared konim pas be ye obj niaz darim
-
+    )
 })
 }, [postId])
 
