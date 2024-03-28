@@ -13,7 +13,7 @@ loading: true
 }
 
 
-function userAction(state,action){ // state mitone harchi bashe ye adad ya obj
+function reducer(state,action){ // state mitone harchi bashe ye adad ya obj
   switch (action.type) { // action ham structure va nahve vorodi bastegi be ma dare ke bhtre ghardad dashte bashim.
     case'get-post-success': 
 
@@ -50,31 +50,34 @@ case 'get-post-request':
 
 export default function App() {
  
-const[state, dispatch]=useReducer( userAction,initialState)
+const[{postId, toast,title, loading}, dispatch]=useReducer( reducer,initialState) // destructing baraye inke tedad kame estefade mikonim mitonestim az state estefade konim ke dar in sorat bayad maghadir pain ba state.postid ... replace mikardim.
 
 
 useEffect(()=>{
   fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)
   .then(response => response.json())
   .then (post =>{
-    
-    userAction('get-post-success',
-    {
+    dispatch({
+      type : 'get-post-success',
       title:post.title,
       message: `post with id ${postId} loaded`
-    }
-    )
+    })
+    
 })
 }, [postId])
 
 
 function handleLoading(e){
- userAction('get-post-request',e.target.value) //*payload inja ye value , ye id hsatesh.
+
+
+ dispatch({
+ type : 'get-post-request',
+postId:  e.target.value
+
+ }) 
 } 
 
   return (
-//     //to in version dare bug mikhure age laoding hamntori bashe matn json neshon nmide pas bayad barash shart bashe //
-// {/* <Loading /> */} 
 <div>
 
   <div>
